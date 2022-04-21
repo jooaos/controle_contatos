@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Contact\ContactService;
+use App\Services\Contact\Contract\ContactServiceContract;
 use Illuminate\Support\ServiceProvider;
 
 class ServiceLayerProvider extends ServiceProvider
@@ -23,6 +25,6 @@ class ServiceLayerProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->bind(ContactServiceContract::class, ContactService::class);
     }
 }
