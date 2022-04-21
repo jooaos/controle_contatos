@@ -25,6 +25,6 @@ class RepositoryLayerProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->bind(ContactRepositoryContract::class, ContactRepository::class);
     }
 }
