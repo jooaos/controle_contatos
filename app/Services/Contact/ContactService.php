@@ -54,7 +54,11 @@ class ContactService implements ContactServiceContract
     public function getById(int $id, array $columns = ['*']): ?Contact
     {
         try {
-            return $this->contactRepository->getById($id, $columns);
+            $contact = $this->contactRepository->getById($id, $columns);
+            if(!$contact) {
+                throw new \Exception('Contact not found');
+            }
+            return $contact;
         } catch (\Exception $e) {
             Log::error(
                 'services.ContactService.getById',
@@ -99,6 +103,10 @@ class ContactService implements ContactServiceContract
     public function update(int $id, array $data): Contact
     {
         try {
+            $contact = $this->getById($id);
+            if(!$contact) {
+                throw new \Exception('Contact not found');
+            }
             return $this->contactRepository->update($id, $data);
         } catch (\Exception $e) {
             Log::error(
@@ -121,6 +129,10 @@ class ContactService implements ContactServiceContract
     public function delete(int $id): bool
     {
         try {
+            $contact = $this->getById($id);
+            if(!$contact) {
+                throw new \Exception('Contact not found');
+            }
             return $this->contactRepository->delete($id);
         } catch (\Exception $e) {
             Log::error(
