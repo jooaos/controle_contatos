@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Contact\ContactCreateRequest;
 use App\Http\Requests\Contact\ContactUpdateRequest;
 use App\Services\Contact\Contract\ContactServiceContract;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -29,7 +31,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        return $this->contactService->getAll();
+        return view('contact.contact', [
+            'contacts' => $this->contactService->getAll()
+        ]);
     }
 
     /**
@@ -39,7 +43,7 @@ class ContactController extends Controller
      */
     public function create()
     {
-        //
+        return view('contact.contact-add');
     }
 
     /**
@@ -50,7 +54,21 @@ class ContactController extends Controller
      */
     public function store(ContactCreateRequest $request)
     {
-        return $this->contactService->create($request->all());
+        try {
+            $this->contactService->create($request->all());
+            return redirect('contacts')->with('positive-status', 'Cadastro concluído com sucesso');
+        } catch (\Exception $e) {
+            Log::error(
+                'controller.ContactController.store',
+                [
+                    'status_code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]
+            );
+            return redirect('contacts')->with('negative-status', 'Não foi possível realizar o cadastro do usuário. Tente novamente.');
+        }
     }
 
     /**
@@ -61,7 +79,23 @@ class ContactController extends Controller
      */
     public function show($id)
     {
-        return $this->contactService->getById($id);
+        try {
+            $contact = $this->contactService->getById($id);
+            return view('contact.contact-show', [
+                'contact' => $contact
+            ]);
+        } catch (\Exception $e) {
+            Log::error(
+                'controller.ContactController.store',
+                [
+                    'status_code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]
+            );
+            return redirect('contacts')->with('negative-status', 'Não foi possível visualizar o contato. Tente novamente.');
+        }
     }
 
     /**
@@ -72,7 +106,23 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $contact = $this->contactService->getById($id);
+            return view('contact.contact-update', [
+                'contact' => $contact
+            ]);
+        } catch (\Exception $e) {
+            Log::error(
+                'controller.ContactController.edit',
+                [
+                    'status_code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]
+            );
+            return redirect('contacts')->with('negative-status', 'Não foi possível atualizar o contato. Tente novamente.');
+        }
     }
 
     /**
@@ -84,7 +134,21 @@ class ContactController extends Controller
      */
     public function update(ContactUpdateRequest $request, $id)
     {
-        return $this->contactService->update($id, $request->all());
+        try {
+            $this->contactService->update($id, $request->all());
+            return redirect('contacts')->with('positive-status', 'Contato atualizado com sucesso!');
+        } catch (\Exception $e) {
+            Log::error(
+                'controller.ContactController.update',
+                [
+                    'status_code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]
+            );
+            return redirect('contacts')->with('negative-status', 'Não foi possível atualizar o contato. Tente novamente.');
+        }
     }
 
     /**
@@ -95,6 +159,20 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        return $this->contactService->delete($id);
+        try {
+            $this->contactService->delete($id);
+            return redirect('contacts')->with('positive-status', 'Contato excluído com suceso!');
+        } catch (\Exception $e) {
+            Log::error(
+                'controller.ContactController.destroy',
+                [
+                    'status_code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ]
+            );
+            return redirect('contacts')->with('negative-status', 'Não foi possível excluir o contato. Tente novamente.');
+        }
     }
 }
