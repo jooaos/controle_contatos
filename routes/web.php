@@ -13,4 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::redirect('/', '/contacts', 301);
 Route::resource('contacts', App\Http\Controllers\ContactController::class);
