@@ -12,6 +12,15 @@
                 </p>
             </div>
             <div>
+                @auth
+                    <a href="{{ route('logout') }}" type="button" class="btn btn-primary text-white">
+                        Logout
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" type="button" class="btn btn-primary text-white">
+                        Login
+                    </a>
+                @endauth
                 <a href="{{ route('contacts.create') }}" class="btn btn-info text-white ml-5">
                     Adicionar Contato
                 </a>
@@ -48,7 +57,8 @@
                             <a href="{{ route('contacts.edit', $contact->id) }}" class="btn btn-primary text-white ml-5">
                                 Editar
                             </a>
-                            <a href="{{ route('contacts.show', $contact->id) }}" class="btn btn-secondary text-white ml-5">
+                            <a href="{{ route('contacts.show', $contact->id) }}"
+                                class="btn btn-secondary text-white ml-5">
                                 Visualizar
                             </a>
                             <form action="{{ route('contacts.destroy', $contact->id) }}" method="POST"

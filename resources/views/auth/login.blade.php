@@ -24,7 +24,7 @@
                 <label for="password" class="form-label">E-mail<span>*</span></label>
                 <input type="password" name="password" class="form-control" id=" password" required>
             </div>
-            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <button type="submit" class="btn btn-primary">Login</button>
         </form>
         @if ($errors->has('login-error'))
             <div class="mt-3 text-danger"> <h6 class="p-0">{{ $errors->first('login-error') }}</h6></div>
