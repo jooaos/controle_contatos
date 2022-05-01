@@ -17,7 +17,7 @@ Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'show'])
     ->name('login');
 Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'handle'])
     ->name('login');
-Route::post('/logout', [App\Http\Controllers\Auth\LogoutController::class, 'handle'])
+Route::get('/logout', [App\Http\Controllers\Auth\LogoutController::class, 'handle'])
     ->name('logout');
 
 Route::redirect('/', '/contacts', 301);
